@@ -6,7 +6,8 @@ const express = require('express');
 
 
 const client = new Client({
-    authStrategy: new LocalAuth({ clientId: "client-one" })
+    authStrategy: new LocalAuth({ clientId: "client-one" }),
+    puppeteer: {headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-extensions']}
 });
 
 
