@@ -35,7 +35,8 @@ function startServer() {
             client.sendMessage(chatId, payload.message)
             .then(message => successResponse(payload, res, message))
             .catch(error => {
-                console.log("ERROR SENDING MESSAGE")
+                console.log("ERROR SENDING MESSAGE");
+                console.log(error);
                 errorResponse(payload, res, error)});
 
         })
@@ -51,6 +52,9 @@ function startServer() {
 }
 
 function getReceiverChat(chats, payload) {
+    console.log("GETTING RECEIVER CHAT");
+    console.log(payload);
+
     let chatId;
     let chat;
     if(payload.receiverType === 'GROUP') {
@@ -62,21 +66,27 @@ function getReceiverChat(chats, payload) {
         chat = chats.find(chat => !chat.isGroup && chat.id.user === phoneNumber);
     }
 
+    console.log(chat);
+
     if(chat) {
         chatId = chat.id._serialized;
+        console.log("SENDING TO CHAT " + chatId);
+        console.log(chat);
     }
 
     if(!chatId) {
         let newPhoneNumber = payload.receiver;
 
         if(newPhoneNumber.charAt(0) === '+') {
-            newPhoneNumber = payload.receiver.substring(1)
+            newPhoneNumber = newPhoneNumber.substring(1)
         }
 
-        newPhoneNumber = getSanitizedPhoneNumber(payload.receiver);
+        newPhoneNumber = getSanitizedPhoneNumber(newPhoneNumber);
 
         if(!isNaN(newPhoneNumber)) {
+            
             chatId = newPhoneNumber + "@c.us";
+            console.log("SENDING TO NEW PHONE NUMBER " + chatId);
         }
     }
 
